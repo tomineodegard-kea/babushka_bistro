@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap"
+      rel="stylesheet"
+    />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>03_popup</title>
+
+    <style>
+      body {
+        font-family: "Roboto Condensed", sans-serif;
+      }
+      nav {
+        display: flex;
+        justify-content: center;
+      }
+
+      #popup {
+        display: none;
+        width: 100vw;
+        height: 100vh;
+        background-color: #1d1d20d2;
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
+
+      #popup article {
+        background-color: white;
+        width: 80vw;
+        height: 85vh;
+        display: block;
+        margin: auto;
+        text-align: center;
+        border-radius: 3em;
+      }
+
+      #popup img {
+        max-width: 55vw;
+        display: block;
+        margin: auto;
+        padding-top: 2em;
+      }
+
+      button {
+        background-color: #81a684;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+      }
+
+      #closeBtn {
+        position: relative;
+        cursor: pointer;
+        color: #81a684;
+        font-size: 2em;
+        top: 10vh;
+        left: 15vw;
+      }
+
+      img {
+        width: 100%;
+      }
+
+      article:hover {
+        background-color: #81a684;
+        border: none;
+      }
+
+      #liste {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-gap: 1em;
+        margin: 2em;
+      }
+
+      .person {
+        padding: 1em;
+        border: 1px solid;
+      }
+
+      .chosen {
+        background-color: #274029;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Persongalleri</h1>
+    <nav>
+      <button data-troende="alle" class="chosen">All</button>
+      <button data-troende="ja">Religious</button>
+      <button data-troende="nej">Non-religious</button>
+      <button data-troende="tvivler">In doubt</button>
+    </nav>
+    <h2 id="religionId">Alle</h2>
+
+    <section id="liste"></section>
+    <template>
+      <article class="person">
+        <h2 class="navn"></h2>
+        <p class="email"></p>
+        <img src="" alt="" class="profil-billede" />
+      </article>
+    </template>
+
+    <section id="popup">
+      <div id="closeBtn">&#x2715</div>
+      <article>
+        <img src="" alt="" class="profil-billede" />
+        <h2 class="navn"></h2>
+        <p class="email"></p>
+      </article>
+    </section>
+
+    <script>
+      let header = document.querySelector("#religionId");
+      const medieurl = "https://babushka-dd8a.restdb.io/rest/menu";
+      const myHeaders = { "x-apikey": "600ec2fb1346a1524ff12de4" };
+
+      // url and API er lagt inn, ikke noe annet.
+      // TODO: legg inn alle nye data-verdier osv
+
+      let personerJSON;
+      let filter = "alle";
+
+      document.addEventListener("DOMContentLoaded", start);
+      // første funktion der kaldes efter DOM er loaded
+      function start() {
+        const filterButtons = document.querySelectorAll("nav button");
+        filterButtons.forEach((btn) =>
+          btn.addEventListener("click", filterPersons)
+        );
+        loadJSON();
+      }
+
+      function filterPersons() {
+        filter = this.dataset.troende;
+        document.querySelector(".chosen").classList.remove("chosen");
+        this.classList.add("chosen");
+        visPersoner();
+        header.textContent = this.textContent;
+      }
+
+      async function loadJSON() {
+        const JSONData = await fetch(
+          "https://persongalleri-5d3e.restdb.io/rest/persongalleri",
+          {
+            headers: myHeaders,
+          }
+        );
+        arrayPersonerJSON = await JSONData.json();
+        console.log(arrayPersonerJSON);
+        visPersoner();
+      }
+
+      //funktion der viser personer i liste view
+      function visPersoner() {
+        const location = document.querySelector("#liste"); // container til articles med en person
+        const template = document.querySelector("template").content; // select indhold af html template (article)
+        location.textContent = "";
+
+        arrayPersonerJSON.forEach((person) => {
+          // loop igennem json (personer)
+          if (filter == person.troende || filter == "alle") {
+            const clone = template.cloneNode(true);
+
+            clone.querySelector(".navn").textContent =
+              person.fornavn + " " + person.efternavn;
+            clone.querySelector(".email").textContent = person.email;
+            clone.querySelector(".profil-billede").src =
+              "../faces/" + person.billede;
+            clone
+              .querySelector("article")
+              .addEventListener("click", () => showDetails(person));
+
+            location.appendChild(clone);
+          }
+        });
+      }
+
+      document
+        .querySelector("#closeBtn")
+        .addEventListener("click", hidePopup);
+
+      function hidePopup() {
+        document.querySelector("#popup").style.display = "none";
+      }
+
+      function showDetails(details) {
+        const popup = document.querySelector("#popup");
+        popup.style.display = "block";
+        popup.querySelector(".navn").textContent =
+          details.fornavn + " " + details.efternavn;
+        popup.querySelector(".email").innerHTML =
+          "<b>Email</b>: " + details.email;
+        popup.querySelector("img").src = "../faces/" + details.billede;
+        console.log(details);
+      }
+    </script>
+  </body>
+</html>
