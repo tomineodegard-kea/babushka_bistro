@@ -1,0 +1,170 @@
+body {
+  font-family: "Roboto Condensed", sans-serif;
+  margin: 0;
+  background-color: whitesmoke;
+}
+
+img {
+  width: 100%;
+}
+
+header {
+  font-family: "Righteous", cursive;
+  color: brown;
+  text-align: center;
+  height: 5.3em;
+  font-size: 2em;
+}
+
+/************ burgermenu mobile **********/
+/* nav #desktopMenu {
+  display: none;
+} */
+
+.hidden {
+  display: none;
+  transform: scale(0);
+  /* transform: translateX(-100%);
+  opacity: 0; */
+}
+
+#menuknap {
+  display: inline-block;
+  font-size: 3em;
+  padding-left: 0.5em;
+  cursor: pointer;
+}
+
+#menu {
+  list-style-type: none;
+  transition: transform 0.3s;
+  transform-origin: top left;
+  padding-left: 0;
+}
+
+.burgerBtnAlternatives {
+  border: none;
+  font-size: 1em;
+  text-align: center;
+  width: 100vw;
+  height: 2em;
+}
+/******************************/
+
+#categoryHeader {
+  text-align: center;
+  margin-top: 0;
+}
+
+article {
+  border: black solid 1px;
+  padding: 1em;
+}
+
+#liste {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 1em;
+  margin: 2em;
+}
+
+#popup {
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  background-color: #1d1d20d2;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+#popup article {
+  background-color: white;
+  width: 80vw;
+  height: 85vh;
+  display: block;
+  margin: auto;
+  text-align: center;
+}
+
+#popup img {
+  max-width: 55vw;
+  display: block;
+  margin: auto;
+  padding-top: 2em;
+}
+
+#closeBtn {
+  position: relative;
+  cursor: pointer;
+  color: brown;
+  font-size: 2em;
+  top: 10vh;
+  left: 15vw;
+}
+
+.person {
+  padding: 1em;
+  border: 1px solid;
+}
+
+.chosen {
+  background-color: brown;
+}
+
+/*********************************************************************/
+
+@media only screen and (min-width: 600px) {
+  /********** menu desktop ***********/
+  /* #menuknap {
+    display: none;
+  }
+
+  #menu.hidden {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  #menu li {
+    /* display: inline-block;
+    display: none;
+  }
+
+  nav #burgerMenu {
+    display: none;
+  } */
+
+  article:hover {
+    background-color: rgb(235, 220, 220);
+    border: none;
+    cursor: pointer;
+  }
+
+  article:hover > h2 {
+    color: brown;
+  }
+
+  button:hover {
+    background-color: brown;
+  }
+
+  .burgerBtnAlternatives {
+    border: none;
+    font-size: 1em;
+    text-align: center;
+    width: 100vw;
+    height: 2em;
+  }
+
+  #menu {
+    padding-bottom: 4em;
+  }
+
+  header {
+    font-size: 4em;
+  }
+
+  #categoryHeader {
+    font-size: 3em;
+  }
+}
